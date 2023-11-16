@@ -1,0 +1,9 @@
+{
+    "action": "api_schedule_event",
+    "end": "{{ json_event.event_date }}T00:00:15",
+    "start": "{{ json_event.event_date }}T00:00:00",
+    "client_id": "{{ json_event.mahler_id }}",
+    "facility_id": "{{ json_event.facility_id }}",
+    "event_type_id": "{{ json_event.event_type }}",
+    "schedule_notes": "{{ json_event.mahler_id ~ '_wcc_' ~ json_event.event_date }}"
+}
