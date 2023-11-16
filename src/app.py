@@ -5,6 +5,12 @@ from datetime import datetime, date
 from jinja2 import Template
 import requests
 
+
+current_dir = os.path.dirname(os.path.realpath(__file__))
+
+# Construct the full path to the template file
+template_path = os.path.join(current_dir, "templates", "bulk_event.json")
+
 class DateEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, date):
@@ -47,7 +53,7 @@ def bulk_schedule():
                 row_dict = dict(zip(columns, bulk_event))
                 print(row_dict)
                 queue_id = row_dict['queue_id']
-                with open("./templates/bulk_event.json", "r") as template_file:
+                with open(template_path, "r") as template_file:
                     bulk_event_template = Template(template_file.read())
                 payload = bulk_event_template.render(json_event=row_dict)
                 print(payload)
