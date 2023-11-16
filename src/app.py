@@ -73,6 +73,7 @@ def send_to_mahler(payload, queue_id):
     except Exception as e:
         print(f"Error posting to mahler: {str(e)}")
     post_status = json.loads(response.text)
+    print(post_status)
     if post_status['status'] == 'SUCCESS':
         log_event_status(queue_id, payload, post_status)
 
