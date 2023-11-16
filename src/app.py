@@ -22,8 +22,10 @@ def handler(event, context):
     body = json.loads(body)
     operation = body['operation']
     print('operation called: ', operation)
-    if operation == 'bulk_schedule':
-        bulk_schedule()
+    # if operation == 'bulk_schedule':
+    #     bulk_schedule()
+    print(os.listdir('/var/task'))
+
 
 def proxy_conn():
     user_name = os.environ['username']
