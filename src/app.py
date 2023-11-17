@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import psycopg2
 from datetime import datetime, date
 from jinja2 import Template
@@ -17,10 +18,7 @@ class DateEncoder(json.JSONEncoder):
             return obj.isoformat()
         return super().default(obj)
 
-def handler(event, context):
-    body = event['Records'][0]['Sns']['Message']
-    body = json.loads(body)
-    operation = body['operation']
+def handler(operation):
     print('operation called: ', operation)
     if operation == 'bulk_schedule':
         bulk_schedule()
@@ -86,3 +84,4 @@ def log_event_status(queue_id, payload, post_status):
             except Exception as e:
                 print(f"Error executing update_status_call: {str(e)}")
 
+handler(sys.argv[2])
