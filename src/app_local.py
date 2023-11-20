@@ -1,5 +1,6 @@
 import json
 import os
+import boto3
 import psycopg2
 from datetime import datetime, date
 from jinja2 import Template
@@ -26,20 +27,34 @@ def handler(event, context):
         bulk_schedule()
 
 
+def get_db_params():
+    ssm = boto3.client('ssm', region_name='us-east-2')  # Replace 'your-region' with your AWS region
+    parameter = ssm.get_parameter(Name='db_easebase_listener', WithDecryption=True)
+    db_params = json.loads(parameter['Parameter']['Value'])
+    return db_params
+
 def proxy_conn():
-    user_name = os.environ['username']
-    password = os.environ['password']
-    rds_proxy_host = os.environ['host']
-    db_name = os.environ['engine']
     try:
-        conn = psycopg2.connect(host=rds_proxy_host,user=user_name,password=password,dbname=db_name)
+        db_params = get_db_params()
+        conn = psycopg2.connect(
+            host=db_params['host'],
+            user=db_params['user'],
+            password=db_params['password'],
+            dbname=db_params['database']
+        )
+        cursor = conn.cursor()
+        cursor.execute("SET TIME ZONE 'US/Central';")  # Set the desired time zone
+        cursor.close()
         return conn
     except Exception as e:
         print(f'db connection failed: {e}')
-    cursor = conn.cursor()
-    cursor.execute("SET TIME ZONE 'US/Central';") # Set the desired time zone
-    cursor.close()
 
+# Example usage
+connection = proxy_conn()
+if connection:
+    print("Successfully connected to the database")
+else:
+    print("Connection failed")
 def bulk_schedule():
     with proxy_conn() as _targetconnection:
         with _targetconnection.cursor() as cur:
@@ -61,12 +76,20 @@ def bulk_schedule():
                 send_to_mahler(payload, queue_id)
             cur.close()
 
+def get_api_params():
+    ssm = boto3.client('ssm', region_name='us-east-2')  # Replace 'your-region' with your AWS region
+    parameter = ssm.get_parameter(Name='mahler_api_conn', WithDecryption=True)
+    api_params = json.loads(parameter['Parameter']['Value'])
+    return api_params
+
+
 def send_to_mahler(payload, queue_id):
     payload = json.loads(payload)
-    url = os.environ['URL']
+    api_params = get_api_params()
+    url = api_params['URL']
     headers= {'Content-Type': 'application/x-www-form-urlencoded'}
-    payload['username'] = os.environ['USERNAME1']
-    payload['key'] = os.environ['MAHLER_KEY']
+    payload['username'] = api_params['USERNAME1']
+    payload['key'] = api_params['MAHLER_KEY']
     try:
         response = requests.post(url, headers=headers, data=payload)
         print(response.text)

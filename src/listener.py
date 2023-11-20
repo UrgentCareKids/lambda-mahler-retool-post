@@ -20,7 +20,7 @@ async def get_db_params():
     return db_params
 
 async def run_app_py():
-    subprocess.run(["python", "app.py"])
+    subprocess.run(["python", "app_local.py"])
 
 async def main():
     db_params = await get_db_params()
