@@ -84,4 +84,4 @@ def log_event_status(queue_id, payload, post_status):
             except Exception as e:
                 print(f"Error executing update_status_call: {str(e)}")
 
-handler(sys.argv[2])
+bulk_schedule()

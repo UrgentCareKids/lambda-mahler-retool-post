@@ -20,8 +20,8 @@ def get_db_params():
     db_params['sslmode'] = 'require'
     return db_params
 
-def run_app_py():
-    subprocess.run(["python3", "/home/ubuntu/repos/lambda-mahler-retool-post/src/app_local.py"])
+def run_app_py(operation):
+    subprocess.run(["python3", "/home/ubuntu/repos/lambda-mahler-retool-post/src/app_local.py", operation])
 
 def main():
     try:
@@ -42,9 +42,11 @@ def main():
                 while connection.notifies:
                     notify = connection.notifies.pop(0)
                     print("Got NOTIFY:", notify.pid, notify.channel, notify.payload)
+                    payload_data = json.loads(notify.payload)
+                    operation_value = payload_data['operation']
 
-                    # Run app.py upon receiving a notification
-                    run_app_py()
+                    # Run app.py with the operation value
+                    run_app_py(operation_value)
 
             # Sleep to prevent high CPU usage and allow for interrupt
             time.sleep(1)
