@@ -43,6 +43,7 @@ def main():
                     notify = connection.notifies.pop(0)
                     print("Got NOTIFY:", notify.pid, notify.channel, notify.payload)
                     payload_data = json.loads(notify.payload)
+                    print(payload_data)
                     operation_value = payload_data['operation']
 
                     # Run app.py with the operation value
