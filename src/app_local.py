@@ -19,13 +19,14 @@ class DateEncoder(json.JSONEncoder):
             return obj.isoformat()
         return super().default(obj)
 
-def handler(operation, queue_id):
-    print('operation called: ', operation)
-    if operation == 'bulk_schedule':
-        bulk_schedule()
-    elif operation == 'string_sender':
-        string_sender(int(queue_id))
-    else: print('Operation Unknown: ' ,operation, 'queue_id: ', queue_id)
+def handler():
+    print(sys.argv)
+    # print('operation called: ', operation)
+    # if operation == 'bulk_schedule':
+    #     bulk_schedule()
+    # elif operation == 'string_sender':
+    #     string_sender(int(queue_id))
+    # else: print('Operation Unknown: ' ,operation, 'queue_id: ', queue_id)
 
 
 def get_db_params():
@@ -199,4 +200,4 @@ def send_to_mahler_string(payload, queue_id):
         print(f"Error posting to mahler: {str(e)}")
             
 
-handler(sys.argv[1], sys.argv[2])
+handler()
