@@ -193,7 +193,7 @@ def send_to_mahler_string(payload, queue_id):
         print(response.text)
         with proxy_conn() as _targetconnection:
             with _targetconnection.cursor() as cur:
-                update_sent_ts = f"update app.gap_mahler_string_queue set sent_ts = current_timestamp, payload = '{json.dumps(payload)}' where queue_id = {queue_id};"
+                update_sent_ts = f"update app.gap_mahler_string_queue set sent_ts = current_timestamp, payload = '{json.dumps(payload)}', task_available = false where queue_id = {queue_id};"
                 cur.execute(update_sent_ts)
                 cur.close()
     except Exception as e:
