@@ -154,7 +154,7 @@ def string_sender(queue_id):
                 print('call create patient', pond_id)
                 with masterdata_conn() as _targetconnection_masterdata:
                     with _targetconnection_masterdata.cursor() as cur_masterdata:
-                        create_mahler_patient = f"call public.mstr_intake_patient_update(0, '{{\"id\":\"{pond_id}\",\"transaction_type\":\"db_patient_update\"}}');"
+                        create_mahler_patient = f"call public.mstr_intake_patient_update(0, '{{\"id\":\"{pond_id}\",\"transaction_type\":\"db_patient_update\",\"test_patient\":\"false\"}}');"
                         try:
                             cur_masterdata.execute(create_mahler_patient)
                             _targetconnection_masterdata.commit()
