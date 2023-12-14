@@ -20,8 +20,8 @@ def get_db_params():
     db_params['sslmode'] = 'require'
     return db_params
 
-def run_app_py(operation):
-    subprocess.run(["python3", "/home/ubuntu/repos/lambda-mahler-retool-post/src/app_local.py", operation])
+def run_app_py(operation, queue_id):
+    subprocess.run(["python3", "/home/ubuntu/repos/lambda-mahler-retool-post/src/app_local.py", operation, queue_id])
 
 def main():
     try:
@@ -45,9 +45,10 @@ def main():
                     payload_data = json.loads(notify.payload)
                     print(payload_data)
                     operation_value = payload_data['operation']
+                    queue_id = payload_data['queue_id']
 
                     # Run app.py with the operation value
-                    run_app_py(operation_value)
+                    run_app_py(operation_value, queue_id)
 
             # Sleep to prevent high CPU usage and allow for interrupt
             time.sleep(1)
