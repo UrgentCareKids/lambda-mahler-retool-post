@@ -164,10 +164,10 @@ def string_sender(queue_id):
                             mahler_client_id = cur_masterdata.fetchone()[0]
                             print(mahler_client_id)
                             try:
-                                update_queue = f"update app.gap_mahler_string_queue set mahler_id = {mahler_client_id}, update_ts = current_timestamp where queue_id = {queue_id};"
-                                cur.execute(update_queue)
-                                _targetconnection_get.commit()
-                                if mahler_client_id != None:
+                                if mahler_client_id != None: 
+                                    update_queue = f"update app.gap_mahler_string_queue set mahler_id = {mahler_client_id}, update_ts = current_timestamp where queue_id = {queue_id};"
+                                    cur.execute(update_queue)
+                                    _targetconnection_get.commit()
                                     string_sender(queue_id)
                             except Exception as e:
                                 print(f"Error updating queue with new mahler id: {str(e)}")
