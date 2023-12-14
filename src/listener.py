@@ -22,7 +22,7 @@ def get_db_params():
 
 def run_app_py(operation, queue_id):
     print('V1')
-    subprocess.run(["python3", "/home/ubuntu/repos/lambda-mahler-retool-post/src/app_local.py", operation, queue_id])
+    subprocess.run(["python3", "/home/ubuntu/repos/lambda-mahler-retool-post/src/app_local.py", operation, str(queue_id)])
 
 def main():
     try:

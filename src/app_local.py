@@ -25,7 +25,7 @@ def handler(operation, queue_id):
     if operation == 'bulk_schedule':
         bulk_schedule()
     elif operation == 'string_sender':
-        string_sender(queue_id)
+        string_sender(int(queue_id))
     else: print('Operation Unknown: ' ,operation, 'queue_id: ', queue_id)
 
 
